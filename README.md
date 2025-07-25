@@ -1,0 +1,1 @@
+# docs-as-code-latex-template
