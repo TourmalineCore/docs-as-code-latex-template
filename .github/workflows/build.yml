@@ -1,0 +1,35 @@
+name: Build LaTeX Document
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    container:
+      image: texlive/texlive:latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install additional dependencies
+      run: |
+        apt update && apt install -y plantuml xvfb inkscape wget
+        wget -q https://github.com/jgraph/drawio-desktop/releases/download/v22.1.2/drawio-amd64-22.1.2.deb -P drawio/
+        apt install -y ./drawio/drawio-amd64-22.1.2.deb
+      env:
+        PLANTUML_JAR: /usr/share/plantuml/plantuml.jar
+
+    - name: Compile LaTeX document
+      run: |
+        xvfb-run lualatex --shell-escape main.tex
+        xvfb-run lualatex --shell-escape main.tex  # executed twice to create table of contents
+
+    - name: Upload PDF artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: main-${{ github.ref_name }}
+        path: main.pdf
+        retention-days: 2

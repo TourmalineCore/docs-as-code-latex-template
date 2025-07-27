@@ -1,0 +1,40 @@
+{
+    "version": "1.0.0",
+    "tasks": [
+        {
+            "label": "Full clean build",
+            "type": "shell",
+            "dependsOn": [],
+            "command": "latexmk -c && xvfb-run lualatex --shell-escape main.tex && xvfb-run lualatex --shell-escape main.tex",
+            "problemMatcher": [],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Build pdf",
+            "type": "shell",
+            "dependsOn": [],
+            "command": "xvfb-run lualatex --shell-escape main.tex",
+            "problemMatcher": [],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Clear LaTeX cache and temporary files",
+            "type": "shell",
+            "dependsOn": [],
+            "command": "latexmk -c && find ./diagrams -type f -name '*.pdf' -delete",
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        }
+    ]
+}
